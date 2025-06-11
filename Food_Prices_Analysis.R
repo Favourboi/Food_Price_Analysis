@@ -1,14 +1,12 @@
 library(dplyr)
 library(readr)
 library(ggplot2)
-library(anomalize)
 library(tibbletime)
-
 
 # 1. Exploratory Data Analysis (EDA) of Food Price Inflation
 # Objective: Analyze and visualize inflation trends across countries (focus = Nigeria)
 # Load inflation data
-inflation_data <- read.csv("C:\\Users\\DELL\\Documents\\favoured\\datasets\\WLD_RTFP_country_2023-10-02.csv")
+inflation_data <- read.csv("WLD_RTFP_country_2023-10-02.csv")
 
 # Clean inflation_data and convert date
 inflation_data <- inflation_data %>%
@@ -59,7 +57,7 @@ library(cluster)
 library(factoextra)
 
 # Load product details data
-product_data <- read.csv("C:\\Users\\DELL\\Documents\\favoured\\datasets\\WLD_RTP_details_2023-10-02.csv")
+product_data <- read.csv("WLD_RTP_details_2023-10-02.csv")
 
 product_data <- product_data %>%
   mutate(total_food_price_increase_since_start_date = parse_number(total_food_price_increase_since_start_date),
@@ -221,6 +219,9 @@ ggplot(product_data, aes(x = country, y = custom_food_index)) +
   theme_minimal()
 
 # Merging with inflation_data
+library(tidyr)
+library(imputeTS)
+
 combined_data <- if ("country" %in% colnames(inflation_data)) {
   inflation_data %>%
     left_join(product_data %>% select(country, custom_food_index), by = "country") %>%
